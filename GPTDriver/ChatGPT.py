@@ -14,8 +14,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import InvalidSelectorException, NoSuchElementException
 
-from utilities.utils import BASEURL, XPaths, GPTModels
+from utilities.utils import BASEURL, XPaths, GPTModels, AuthMethods
 
 class NewChat():
     def __init__(self, driver: uc, tab_id: int) -> None:
@@ -39,37 +40,89 @@ class NewChat():
 class ChatGPT():
     NEW_TAB_SCRIPT = "window.open('about:blank', '_blank');"
 
-    def __init__(self, email: str, pwd: str) -> None:
+    def __init__(self, email: str, pwd: str, auth_method: str) -> None:
         self.email = email
         self.pwd = pwd
+        self.auth_method = auth_method
         self.is_closed = False
         self.model = GPTModels.gpt3
         options = uc.ChromeOptions()
         self.driver = uc.Chrome(use_subprocess=True, options=options)
+        self.wait = WebDriverWait(self.driver, 30)
         self.login()
+        self.__close_dialog()
         self.is_plus = self.__check_is_plus()
 
     def login(self) -> None:
         """Login to the OpenAI Chat website.
         """
         # Check if the instance is closed.
+        if self.auth_method == AuthMethods.email:
+            self.__email_login()
+        elif self.auth_method == AuthMethods.google:
+            self.__google_login()
+        else:
+            raise Exception("Invalid auth method.")
+
+    def __email_login(self) -> None:
+        """Email Login to the OpenAI Chat website.
+        """
+        # Check if the instance is closed.
         self.__check_is_closed()
 
         # Open the login page.
         self.driver.get(BASEURL.base + BASEURL.login)
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, XPaths.login_button))).click()
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, XPaths.login_button))).click()
         time.sleep(5)
 
         # Send the email
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, XPaths.continue_button)))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, XPaths.continue_button)))
         self.driver.find_element(By.ID, XPaths.username_id).send_keys(self.email)
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, XPaths.continue_button))).click()
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, XPaths.continue_button))).click()
         time.sleep(3)
 
         # Send the password
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, XPaths.continue_button)))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, XPaths.continue_button)))
         self.driver.find_element(By.ID, XPaths.password_id).send_keys(self.pwd)
         self.driver.find_element(By.ID, XPaths.password_id).send_keys(Keys.RETURN)
+        time.sleep(5)
+
+    def __google_login(self) -> None:
+        """Google Login to the OpenAI Chat website.
+        """
+        # Check if the instance is closed.
+        self.__check_is_closed()
+
+        # Open the login page.
+        self.driver.get(BASEURL.base + BASEURL.login)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, XPaths.login_button))).click()
+
+        # Click the Google button where data-provider="google"
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@data-provider='google']"))).click()
+        time.sleep(5)
+
+        # Wait the button id="identifierNext" and click it
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@id='identifierNext']/div/button")))
+
+        # Send the email where is an input and type="email"
+        self.driver.find_element(By.CSS_SELECTOR, "input[type='email']").send_keys(self.email)
+
+        # Click the button id="identifierNext"
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@id='identifierNext']/div/button"))).click()
+        time.sleep(5)
+
+        # Wait the password next button and click it
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@id='passwordNext']/div/button")))
+
+        # Send the password where is an input and type="password"
+        self.driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(self.pwd)
+
+        # Click the button id="passwordNext"
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@id='passwordNext']/div/button"))).click()
+        time.sleep(10)
+
+        # Wait until the page url is the base url and its fully load
+        self.wait.until(EC.url_to_be(BASEURL.base))
         time.sleep(5)
 
     def close(self) -> None:
