@@ -220,7 +220,36 @@ class ChatGPT():
         if self.driver.current_url.startswith(BASEURL.base + BASEURL.login):
             self.login()
 
+    def __close_dialog(self) -> None:
+        """Close the dialog if it is present.
+        """
+        for _ in range(20):
+            try:
+                # Find a div where role="dialog"
+                self.driver.find_element(By.XPATH, "//div[@role='dialog']")
+                # Click a button where the xpath is /button/div and inside this div there is a "Next" text
+                self.driver.find_element(By.XPATH, "//button/div[text()='Next']").click()
+                time.sleep(2)
+            except NoSuchElementException:
+                pass
+
+            try:
+                # Find a div where role="dialog"
+                self.driver.find_element(By.XPATH, "//div[@role='dialog']")
+                # Click a button where the xpath is /button/div and inside this div there is a "Done" text
+                self.driver.find_element(By.XPATH, "//button/div[text()='Done']").click()
+                time.sleep(2)
+            except NoSuchElementException:
+                pass
+
+        time.sleep(3)
+        try:
+            self.driver.find_element(By.XPATH, "//div[@role='dialog']")
+            raise Exception("Dialog not closed.")
+        except NoSuchElementException:
+            pass
+
 
 if __name__ == "__main__":
-    chat = ChatGPT(os.getenv("EMAIL"), os.getenv("PASSWORD"))
+    chat = ChatGPT(os.getenv("EMAIL"), os.getenv("PASSWORD"), AuthMethods.google)
     chat.close()
