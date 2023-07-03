@@ -18,6 +18,8 @@ from selenium.common.exceptions import InvalidSelectorException, NoSuchElementEx
 
 from utilities.utils import BASEURL, XPaths, GPTModels, AuthMethods
 
+DEBUGGING_MODE = False
+
 class NewChat():
     def __init__(self, driver: uc, tab_id: int) -> None:
         self.driver = driver
@@ -35,7 +37,46 @@ class NewChat():
         # Go to the driver tab
         self.driver.switch_to.window(self.tab_id)
 
-        #TODO: Create the prompt sender and getter
+        self.__send_msg(send)
+
+        return self.__read_msg()
+
+    def __send_msg(self, send: str) -> None:
+        """Send a message to the chat.
+
+        Args:
+            send (str): The message to send.
+        """
+        # Write the message in the textarea with id="prompt-textarea"
+        self.driver.find_element(By.ID, "prompt-textarea").send_keys(send)
+        time.sleep(1)
+        self.driver.find_element(By.ID, "prompt-textarea").send_keys(Keys.RETURN)
+        #time.sleep(1)
+
+        # try to find a path element where d = M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z
+        try:
+            self.driver.find_element(By.XPATH, XPaths.send_icon)
+            command_send = False
+        except NoSuchElementException:
+            command_send = True
+
+        if not command_send:
+            raise ValueError("The message could not be sent.")
+
+
+    def __read_msg(self) -> str:
+        """Read the message from the chat.
+
+        Returns:
+            str: The message from the chat.
+        """
+        #WebDrive until path element
+        WebDriverWait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, XPaths.send_icon)))
+
+        # read div where class is markdown
+        response_list = self.driver.find_elements(By.CLASS_NAME, "markdown")
+
+        return response_list[-1].get_attribute("innerHTML")
 
 class ChatGPT():
     """ChatGPT class
@@ -49,6 +90,8 @@ class ChatGPT():
         self.is_closed = False
         self.model = GPTModels.gpt3
         options = uc.ChromeOptions()
+        if not DEBUGGING_MODE:
+            options.add_argument('--headless')
         self.driver = uc.Chrome(use_subprocess=True, options=options)
         self.wait = WebDriverWait(self.driver, 30)
         self.login()
@@ -254,4 +297,9 @@ class ChatGPT():
 
 if __name__ == "__main__":
     chat = ChatGPT(os.getenv("EMAIL"), os.getenv("PASSWORD"), AuthMethods.google)
+    new_chat = chat.new_chat()
+    resp = new_chat.prompt('Hey! Can you read me?')
+    print(resp)
+    resp = new_chat.prompt('Explainme the World War II')
+    print(resp)
     chat.close()
