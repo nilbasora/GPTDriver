@@ -38,6 +38,8 @@ class NewChat():
         #TODO: Create the prompt sender and getter
 
 class ChatGPT():
+    """ChatGPT class
+    """
     NEW_TAB_SCRIPT = "window.open('about:blank', '_blank');"
 
     def __init__(self, email: str, pwd: str, auth_method: str) -> None:
@@ -62,7 +64,7 @@ class ChatGPT():
         elif self.auth_method == AuthMethods.google:
             self.__google_login()
         else:
-            raise Exception("Invalid auth method.")
+            raise ValueError("Invalid auth method.")
 
     def __email_login(self) -> None:
         """Email Login to the OpenAI Chat website.
@@ -149,7 +151,7 @@ class ChatGPT():
             self.__plus_needed()
             self.model = GPTModels.gpt4_browsing
         else:
-            raise Exception("Invalid model.")
+            raise ValueError("Invalid model.")
 
     def new_chat(self) -> NewChat:
         """Create a new chat tab.
@@ -205,7 +207,7 @@ class ChatGPT():
             Exception: If the user is not a plus member.
         """
         if not self.is_plus:
-            raise Exception("You must be a plus member to use this functionality.")
+            raise ValueError("You must be a plus member to use this functionality.")
 
     def __check_is_closed(self) -> None:
         """Check if the instance is closed.
@@ -214,7 +216,7 @@ class ChatGPT():
             Exception: If the instance is closed.
         """
         if self.is_closed:
-            raise Exception('This instance of ChatGPT is closed.')
+            raise ValueError('This instance of ChatGPT is closed.')
 
     def __check_is_logged(self):
         if self.driver.current_url.startswith(BASEURL.base + BASEURL.login):
@@ -245,7 +247,7 @@ class ChatGPT():
         time.sleep(3)
         try:
             self.driver.find_element(By.XPATH, "//div[@role='dialog']")
-            raise Exception("Dialog not closed.")
+            raise ValueError("Dialog not closed.")
         except NoSuchElementException:
             pass
 
