@@ -16,3 +16,7 @@ class XPaths():
     plus_text = '//h1/span[contains(text(), "Plus")]'
     username_id = "username"
     password_id = "password"
+
+class AuthMethods():
+    email = "email"
+    google = "google"
