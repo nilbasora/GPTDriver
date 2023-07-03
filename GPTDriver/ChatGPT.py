@@ -186,8 +186,16 @@ class ChatGPT():
         if self.driver.current_url != BASEURL.base:
             self.driver.get(BASEURL.base)
 
-        WebDriverWait(self.driver, 10)
-        self.is_plus = self.driver.find_element(By.ID, XPaths.plus_text)
+        # Wait unitl page is fully load
+        self.wait.until(EC.url_to_be(BASEURL.base))
+
+        # Check if the plus text is present
+        try:
+            self.is_plus = self.driver.find_element(By.ID, XPaths.plus_text)
+            self.is_plus = True
+        except InvalidSelectorException:
+            self.is_plus = False
+
         return self.is_plus
 
     def __plus_needed(self) -> None:
