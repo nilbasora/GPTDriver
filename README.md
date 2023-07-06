@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/nilbasora/GPTDriver"><img src="" alt="GPTDriver"></a>
+  <a href="https://github.com/nilbasora/GPTDriver"><img src="https://github.com/nilbasora/GPTDriver/assets/32940624/4c97f7da-f44a-401e-bdc0-1a36ab400834" alt="GPTDriver"></a>
 </p>
 <p align="center">
     <em>Take control of ChatGPT effortlessly with GPTDriver: Simplified interaction, no API key required.</em>
@@ -98,6 +98,7 @@ See the [open issues](https://github.com/nilbasora/GPTDriver/issues) for a list 
   - [ ] Apple
 - [ ] Follow old conversations
 - [x] Automatic "plus" user detection
+- [ ] Add Tests
 
 ## Contributing
 
@@ -122,6 +123,6 @@ Distributed under the MIT License. See [LICENSE](https://github.com/nilbasora/GP
 
 ## Authors
 
-- **Nil Basora** - _Data Scientist_ - [Nil Basora](https://github.com/nilbasora/)
+- **[Nil Basora](https://github.com/nilbasora/)** - _Data Scientist_
 
 ## Contributors
