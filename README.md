@@ -1,6 +1,5 @@
 <p align="center">
-  <a href="https://github.com/nilbasora/GPTDriver"><img src="![13fe3d643cac4549a8229db7fe61d301](https://github.com/nilbasora/GPTDriver/assets/32940624/4c97f7da-f44a-401e-bdc0-1a36ab400834)
-" alt="GPTDriver"></a>
+  <a href="https://github.com/nilbasora/GPTDriver"><img src="https://github.com/nilbasora/GPTDriver/assets/32940624/4c97f7da-f44a-401e-bdc0-1a36ab400834" alt="GPTDriver"></a>
 </p>
 <p align="center">
     <em>Take control of ChatGPT effortlessly with GPTDriver: Simplified interaction, no API key required.</em>
