@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import InvalidSelectorException, NoSuchElementException
 
-from utilities.utils import BASEURL, XPaths, GPTModels, AuthMethods
+from GPTDriver.utilities.utils import BASEURL, XPaths, GPTModels, AuthMethods
 
 DEBUGGING_MODE = False
 
