@@ -1,11 +1,5 @@
 "ChatGPT class"
 
-# Only for testing propuses
-import os
-from dotenv import load_dotenv
-load_dotenv()
-#######################
-
 import time
 
 import undetected_chromedriver as uc
@@ -293,13 +287,3 @@ class ChatGPT():
             raise ValueError("Dialog not closed.")
         except NoSuchElementException:
             pass
-
-
-if __name__ == "__main__":
-    chat = ChatGPT(os.getenv("EMAIL"), os.getenv("PASSWORD"), AuthMethods.google)
-    new_chat = chat.new_chat()
-    resp = new_chat.prompt('Hey! Can you read me?')
-    print(resp)
-    resp = new_chat.prompt('Explainme the World War II')
-    print(resp)
-    chat.close()
