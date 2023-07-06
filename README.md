@@ -98,6 +98,7 @@ See the [open issues](https://github.com/nilbasora/GPTDriver/issues) for a list 
   - [ ] Apple
 - [ ] Follow old conversations
 - [x] Automatic "plus" user detection
+- [ ] Add Tests
 
 ## Contributing
 
@@ -122,6 +123,6 @@ Distributed under the MIT License. See [LICENSE](https://github.com/nilbasora/GP
 
 ## Authors
 
-- **Nil Basora** - _Data Scientist_ - [Nil Basora](https://github.com/nilbasora/)
+- **[Nil Basora](https://github.com/nilbasora/)** - _Data Scientist_
 
 ## Contributors
