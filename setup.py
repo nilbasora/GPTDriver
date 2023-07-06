@@ -5,6 +5,8 @@ setup(
     packages=find_packages(include=['GPTDriver']),
     version='0.1.0',
     description='Selenium Driver to Control ChatGPT from Command Lines',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     author='Nil Basora',
     author_email="nilbasora@gmail.com",
     url="https://github.com/nilbasora/GPTDriver",
