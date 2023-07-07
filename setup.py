@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 setup(
     name='GPTDriver',
     packages=find_packages(include=['GPTDriver']),
-    version='0.1.0',
+    version='{{VERSION_PLACEHOLDER}}',
     description='Selenium Driver to Control ChatGPT from Command Lines',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
